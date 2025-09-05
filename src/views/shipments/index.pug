@@ -1,0 +1,34 @@
+extends ../layout 
+ 
+block content 
+  a.btn.btn-success.mb-3(href="/shipments/new") ➕ Nuevo Envío 
+  if shipments.length 
+    table.table.table-bordered.table-striped
+      thead.table-light
+        tr 
+          th Cliente 
+          th Origen 
+          th Destino 
+          th Estado 
+          th Acciones 
+      tbody
+        each s in shipments 
+          tr 
+            td #{s.client} 
+            td #{s.origin} 
+            td #{s.destination} 
+            td 
+              if s.status === 'pendiente'
+                span.badge.bg-secondary #{s.status}
+              else if s.status === 'en tránsito'
+                span.badge.bg-info.text-dark #{s.status}
+              else if s.status === 'entregado'
+                span.badge.bg-success #{s.status}
+              else
+                span.badge.bg-light.text-dark #{s.status}
+            td 
+              a.btn.btn-warning.btn-sm.me-1(href=`/shipments/${s.id}/edit`) ✏️ Editar 
+              form(method="post", action=`/shipments/${s.id}/delete`, style="display:inline") 
+                button.btn.btn-danger.btn-sm(type="submit") 🗑 Eliminar 
+  else 
+    p.text-muted No hay envíos cargados. 

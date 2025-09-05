@@ -1,0 +1,13 @@
+{
+  "name": "logiflow",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pug": "^3.0.3"
+  }
+}
