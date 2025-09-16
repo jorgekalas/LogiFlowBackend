@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+  h2 Nuevo Cliente
+  form(method="post", action="/clients")
+    label Nombre:
+    input(type="text", name="name", required)
+    label Email:
+    input(type="email", name="email", required)
+    label Teléfono:
+    input(type="text", name="phone")
+    button.btn.btn-add(type="submit") Guardar

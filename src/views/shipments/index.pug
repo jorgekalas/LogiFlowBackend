@@ -1,7 +1,7 @@
 extends ../layout 
  
 block content 
-  a.btn.btn-success.mb-3(href="/shipments/new") ➕ Nuevo Envío 
+  a.btn.btn-add.mb-3(href="/shipments/new") ➕ Nuevo Envío 
   if shipments.length 
     table.table.table-bordered.table-striped
       thead.table-light
@@ -27,8 +27,8 @@ block content
               else
                 span.badge.bg-light.text-dark #{s.status}
             td 
-              a.btn.btn-warning.btn-sm.me-1(href=`/shipments/${s.id}/edit`) ✏️ Editar 
-              form(method="post", action=`/shipments/${s.id}/delete`, style="display:inline") 
-                button.btn.btn-danger.btn-sm(type="submit") 🗑 Eliminar 
+              a.btn.btn-edit(href=`/shipments/${s.id}/edit`) Editar
+              form(method="post", action=`/shipments/${s.id}/delete`, style="display:inline")
+                button.btn.btn-delete(type="submit") Eliminar
   else 
     p.text-muted No hay envíos cargados. 

@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  a.btn.btn-add(href="/clients/new") ➕ Nuevo Cliente
+  if clients.length
+    table
+      tr
+        th Nombre
+        th Email
+        th Teléfono
+        th Acciones
+      each c in clients
+        tr
+          td #{c.name}
+          td #{c.email}
+          td #{c.phone}
+          td
+            a.btn.btn-edit(href=`/clients/${c.id}/edit`) Editar
+            form(method="post", action=`/clients/${c.id}/delete`, style="display:inline")
+              button.btn.btn-delete(type="submit") Eliminar
+  else
+    p No hay clientes cargados.
