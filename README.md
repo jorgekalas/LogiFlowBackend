@@ -26,4 +26,43 @@ El servidor se abrirá en: [http://localhost:3000](http://localhost:3000)
 - Editar envío
 - Eliminar envío
 
+- Listar clientes
+- Crear cliente
+- Editar cliente
+- Eliminar cliente
+
+## 🧪 API Endpoints
+
+- Clientes
+
+  - GET /clients → Listar clientes
+
+  - POST /clients → Crear cliente
+
+  - PUT /clients/:id → Actualizar cliente
+
+  - DELETE /clients/:id → Eliminar cliente
+
+- Envíos
+
+  - GET /shipments → Listar envíos
+
+  - POST /shipments → Crear envío
+
+  - PUT /shipments/:id → Actualizar envío
+
+  - DELETE /shipments/:id → Eliminar envío
+
 Base de datos persistida en **data/db.json** (próximamente migraremos a MongoDB)
+
+👥 Autores
+
+Hillcoat, Juan Pablo
+
+Leone, Milena Nahir
+
+Rodriguez, Carlos Douglas
+
+Molina, Maria Julieta
+
+Kalas, Jorge Adrian
