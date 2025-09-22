@@ -1,8 +1,8 @@
-# LogiFlow 🚚
+# LogiFlow 
 
 CRUD básico de envíos con Node.js, Express, Pug y base de datos en JSON.
 
-## 🚀 Instalación
+## Instalación
 
 1. Clonar o descomprimir el proyecto.
 2. Abrir la carpeta en VS Code.
@@ -11,7 +11,7 @@ CRUD básico de envíos con Node.js, Express, Pug y base de datos en JSON.
    npm install
    ```
 
-## ▶️ Ejecución
+## Ejecución
 
 ```bash
 npm start
@@ -19,7 +19,7 @@ npm start
 
 El servidor se abrirá en: [http://localhost:3000](http://localhost:3000)
 
-## 📌 Funcionalidades
+## Funcionalidades
 
 - Listar envíos
 - Crear envío
@@ -33,7 +33,7 @@ El servidor se abrirá en: [http://localhost:3000](http://localhost:3000)
 
 ## 🧪 API Endpoints
 
-- Clientes
+-> Clientes
 
   - GET /clients → Listar clientes
 
@@ -55,7 +55,7 @@ El servidor se abrirá en: [http://localhost:3000](http://localhost:3000)
 
 Base de datos persistida en **data/db.json** (próximamente migraremos a MongoDB)
 
-👥 Autores
+-> Autores
 
 Hillcoat, Juan Pablo
 
