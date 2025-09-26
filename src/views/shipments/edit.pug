@@ -1,7 +1,7 @@
 extends ../layout 
  
 block content 
-  h2.mb-3 Editar Envío 
+  h2.mb-3 Editar paquete 
   form(method="post", action=`/shipments/${shipment.id}`, class="needs-validation") 
     .mb-3
       label.form-label Cliente: 
@@ -18,5 +18,5 @@ block content
         option(value="pendiente", selected=shipment.status==="pendiente") Pendiente 
         option(value="en tránsito", selected=shipment.status==="en tránsito") En tránsito 
         option(value="entregado", selected=shipment.status==="entregado") Entregado 
-    button.btn.btn-primary.mt-2(type="submit") 💾 Actualizar
+    button.btn.btn-primary.mt-2(type="submit") Actualizar
     a.btn.btn-secondary.mt-2.ms-2(href="/") Cancelar

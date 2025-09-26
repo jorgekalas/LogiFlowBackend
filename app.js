@@ -21,5 +21,5 @@ app.use("/shipments", shipmentRouter);
 app.use("/clients", clientRouter);
 
 app.listen(PORT, () => {
-	console.log(`🚚 LogiFlow server running on http://localhost:${PORT}`);
+	console.log(` LogiFlow server running on http://localhost:${PORT}`);
 });
