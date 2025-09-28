@@ -1,7 +1,7 @@
 extends ../layout 
  
 block content 
-  a.btn.btn-add.mb-3(href="/shipments/new") ➕ Nuevo Paquete 
+  a.btn.btn-add.mb-3(href="/shipments/new")  Nuevo envio
   if shipments.length 
     table.table.table-bordered.table-striped
       thead.table-light
@@ -31,4 +31,4 @@ block content
               form(method="post", action=`/shipments/${s.id}/delete`, style="display:inline")
                 button.btn.btn-delete(type="submit") Eliminar
   else 
-    p.text-muted No hay paquetes cargados. 
+    p.text-muted No hay envios cargados. 

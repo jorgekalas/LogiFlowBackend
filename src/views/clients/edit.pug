@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  h2 Editar Repartidor
+  h2 Editar cliente
   form(method="post", action=`/clients/${client.id}`)
     label Nombre:
     input(type="text", name="name", value=client.name, required)
