@@ -174,8 +174,7 @@ Desarrollado por:
 - Rodriguez, Carlos Douglas; 
 - Molina, María Julieta; 
 - Kalas, Jorge Adrian  
-Proyecto académico de gestión logística con Node.js y MongoDB.  
-Diseño y estética basados en Bootstrap 5 y Pug.
+
 
 ---
 
