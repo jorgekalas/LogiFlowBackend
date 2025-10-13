@@ -1,22 +1,46 @@
-extends ../layout 
- 
-block content 
-  h2.mb-3 Editar envios 
-  form(method="post", action=`/shipments/${shipment.id}`, class="needs-validation") 
+extends ../layout
+
+block content
+  h2.mb-4 Editar Envío
+
+  form(method="post", action=`/shipments/${shipment._id}?_method=PUT`)
+    // Cliente
     .mb-3
-      label.form-label Cliente: 
-      input.form-control(type="text", name="client", value=shipment.client, required) 
+      label.form-label(for="client") Cliente
+      select.form-select#client(name="client" required)
+        each c in clients
+          option(value=c._id selected=(String(c._id)===String(shipment.client)))= c.name + " (" + c.email + ")"
+
+    // Origen
     .mb-3
-      label.form-label Origen: 
-      input.form-control(type="text", name="origin", value=shipment.origin, required) 
+      label.form-label(for="origin") Origen
+      input.form-control#origin(type="text" name="origin" required value=shipment.origin)
+
+    // Destino
     .mb-3
-      label.form-label Destino: 
-      input.form-control(type="text", name="destination", value=shipment.destination, required) 
+      label.form-label(for="destination") Destino
+      input.form-control#destination(type="text" name="destination" required value=shipment.destination)
+
+    // Estado
     .mb-3
-      label.form-label Estado: 
-      select.form-select(name="status") 
-        option(value="pendiente", selected=shipment.status==="pendiente") Pendiente 
-        option(value="en tránsito", selected=shipment.status==="en tránsito") En tránsito 
-        option(value="entregado", selected=shipment.status==="entregado") Entregado 
-    button.btn.btn-primary.mt-2(type="submit") Actualizar
-    a.btn.btn-secondary.mt-2.ms-2(href="/") Cancelar
+      label.form-label(for="status") Estado
+      select.form-select#status(name="status")
+        option(value="pendiente" selected=(shipment.status==='pendiente')) pendiente
+        option(value="en tránsito" selected=(shipment.status==='en tránsito')) en tránsito
+        option(value="entregado" selected=(shipment.status==='entregado')) entregado
+
+    // Productos
+    h5.mt-4 Productos
+    p.text-muted Actualizá las cantidades (0 para quitarlo).
+    - const qMap = new Map((shipment.products||[]).map(it => [String(it.product?._id), it.quantity]));
+    each p in products
+      - const current = qMap.get(String(p._id)) || 0;
+      .row.mb-2
+        .col-md-6
+          label.form-label(for=`q-${p._id}`)= p.name
+          small.text-muted.ms-2 (stock actual: #{p.stock})
+        .col-md-3
+          input.form-control(type="number", id=`q-${p._id}`, name=`quantities[${p._id}]`, min="0", value=current)
+
+    button.btn.btn-success(type="submit") Guardar
+    a.btn.btn-secondary.ms-2(href="/shipments") Cancelar

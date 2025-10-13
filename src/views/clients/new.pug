@@ -1,12 +1,28 @@
 extends ../layout
 
 block content
-  h2 Nuevo paquete
+  h2.mb-4 Nuevo Cliente
+
   form(method="post", action="/clients")
-    label Nombre:
-    input(type="text", name="name", required)
-    label Email:
-    input(type="email", name="email", required)
-    label Teléfono:
-    input(type="text", name="phone")
-    button.btn.btn-add(type="submit") Guardar
+    .mb-3
+      label.form-label(for="name") Nombre
+      input.form-control#name(type="text", name="name", required, placeholder="Ingresá el nombre del cliente")
+
+    .mb-3
+      label.form-label(for="lastName") Apellido
+      input.form-control#lastName(type="text", name="lastName", required, placeholder="Ingresá el apellido del cliente")
+
+    .mb-3
+      label.form-label(for="dni") DNI
+      input.form-control#dni(type="text", name="dni", required, placeholder="Ej: 12345678")
+
+    .mb-3
+      label.form-label(for="email") Email
+      input.form-control#email(type="email", name="email", required, placeholder="cliente@correo.com")
+
+    .mb-3
+      label.form-label(for="phone") Teléfono
+      input.form-control#phone(type="text", name="phone", placeholder="Ej: +54 9 351 1234567")
+
+    button.btn.btn-success(type="submit") Guardar
+    a.btn.btn-secondary.ms-2(href="/clients") Cancelar

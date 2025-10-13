@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  h2 Editar Producto
+  form(method="post", action=`/products/${product._id}`)
+    .mb-3
+      label.form-label Nombre
+      input.form-control(type="text", name="name", required, value=product.name)
+    .mb-3
+      label.form-label Descripción
+      textarea.form-control(name="description")= product.description
+    .mb-3
+      label.form-label Stock
+      input.form-control(type="number", name="stock", min="0", required, value=product.stock)
+    .mb-3
+      label.form-label Precio
+      input.form-control(type="number", name="price", step="0.01", min="0", required, value=product.price)
+    button.btn.btn-success(type="submit") Guardar
+    a.btn.btn-secondary.ms-2(href="/products") Cancelar

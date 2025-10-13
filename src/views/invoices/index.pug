@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  h2 Lista de Facturas
+  a.btn.btn-success.mb-3(href="/invoices/new") Nueva factura
+
+  if invoices.length
+    table.table.table-striped.table-bordered
+      thead.table-dark
+        tr
+          th Número
+          th Fecha
+          th Monto
+          th Envío
+          th Acciones
+      tbody
+        each f in invoices
+          tr
+            td #{f.number}
+            td #{f.date.toISOString().substring(0,10)}
+            td $#{f.amount}
+            td
+              if f.shipment
+                | Envío #{f.shipment.sequence} - #{f.shipment.client ? f.shipment.client.name : "Sin cliente"}
+              else
+                | Sin envío
+            td
+              a.btn.btn-warning.btn-sm.me-2(href=`/invoices/${f._id}/edit`) Editar
+              form(method="post", action=`/invoices/${f._id}/delete`, style="display:inline")
+                button.btn.btn-danger.btn-sm(type="submit") Eliminar
+  else
+    p.text-muted No hay facturas cargadas.

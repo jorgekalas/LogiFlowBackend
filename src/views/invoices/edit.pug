@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+  h2 Editar Factura
+
+  form(method="post", action=`/invoices/${invoice._id}?_method=PUT`)
+    .mb-3
+      label.form-label Número
+      input.form-control(type="text", name="number", value=invoice.number required)
+
+    .mb-3
+      label.form-label Fecha
+      input.form-control(type="date", name="date", value=invoice.date.toISOString().substring(0,10) required)
+
+    .mb-3
+      label.form-label Monto
+      input.form-control(type="number", step="0.01", name="amount", value=invoice.amount required)
+
+    .mb-3
+      label.form-label Asociar a Envío
+      select.form-select(name="shipment")
+        option(value="") Ninguno
+        each s in shipments
+          option(value=s._id selected=(invoice.shipment && String(invoice.shipment._id)===String(s._id)))
+            | Envío #{s.sequence} - #{s.client ? s.client.name : "Sin cliente"}
+
+    button.btn.btn-success(type="submit") Guardar
+    a.btn.btn-secondary.ms-2(href="/invoices") Cancelar

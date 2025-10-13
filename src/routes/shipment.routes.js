@@ -13,10 +13,8 @@ const router = Router();
 router.get("/", listShipments);
 router.get("/new", showCreate);
 router.post("/", createShipment);
-router.put("/:id", updateShipment);
 router.get("/:id/edit", showEdit);
-router.post("/:id", updateShipment);
-router.post("/:id/delete", deleteShipment); //para web
-router.delete("/:id", deleteShipment); //para postman
+router.post("/:id/delete", deleteShipment);
+router.put("/:id", updateShipment);
 
 export default router;

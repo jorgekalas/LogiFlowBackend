@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  h2 Lista de Productos
+  a.btn.btn-success.mb-3(href="/products/new") Nuevo producto
+  if products.length
+    table.table
+      thead
+        tr
+          th Nombre
+          th Descripción
+          th Stock
+          th Precio
+          th Acciones
+      tbody
+        each p in products
+          tr
+            td= p.name
+            td= p.description || '-'
+            td= p.stock
+            td $#{p.price}
+            td
+              a.btn.btn-warning.btn-sm.me-2(href=`/products/${p._id}/edit`) Editar
+              form(method="post", action=`/products/${p._id}/delete`, style="display:inline")
+                button.btn.btn-danger.btn-sm(type="submit") Eliminar
+  else
+    p.text-muted No hay productos cargados.

@@ -1,22 +1,28 @@
 extends ../layout
 
 block content
-  a.btn.btn-add(href="/clients/new")  Nuevo Cliente
-  if clients.length
-    table
+  h2.mb-4 Lista de Clientes
+
+  a.btn.btn-success.mb-3(href="/clients/new") Nuevo Cliente
+
+  table.table.table-striped.table-bordered
+    thead.table-dark
       tr
         th Nombre
+        th Apellido
+        th DNI
         th Email
         th Teléfono
         th Acciones
-      each c in clients
+    tbody
+      each client in clients
         tr
-          td #{c.name}
-          td #{c.email}
-          td #{c.phone}
+          td= client.name
+          td= client.lastName
+          td= client.dni
+          td= client.email
+          td= client.phone
           td
-            a.btn.btn-edit(href=`/clients/${c.id}/edit`) Editar
-            form(method="post", action=`/clients/${c.id}/delete`, style="display:inline")
-              button.btn.btn-delete(type="submit") Eliminar
-  else
-    p No hay clientes cargados.
+            a.btn.btn-warning.btn-sm.me-1(href=`/clients/${client._id}/edit`) Editar
+            form.d-inline(method="post", action=`/clients/${client._id}?_method=DELETE`)
+              button.btn.btn-danger.btn-sm(type="submit") Eliminar

@@ -1,22 +1,81 @@
-extends ../layout 
- 
-block content 
-  h2.mb-3 Nuevo envio 
-  form(method="post", action="/shipments", class="needs-validation") 
+extends ../layout
+
+block content
+  h2.mb-4 Nuevo Envío
+
+  form(method="post", action="/shipments")
+    // Cliente
     .mb-3
-      label.form-label Cliente: 
-      input.form-control(type="text", name="client", required) 
+      label.form-label(for="client") Cliente
+      select.form-select#client(name="client", required)
+        option(value="") Seleccioná un cliente
+        each c in clients
+          option(value=c._id)= `${c.name} (${c.email})`
+
+    // Origen
     .mb-3
-      label.form-label Origen: 
-      input.form-control(type="text", name="origin", required) 
+      label.form-label(for="origin") Origen
+      input.form-control#origin(type="text", name="origin", placeholder="Ciudad de origen", required)
+
+    // Destino
     .mb-3
-      label.form-label Destino: 
-      input.form-control(type="text", name="destination", required) 
+      label.form-label(for="destination") Destino
+      input.form-control#destination(type="text", name="destination", placeholder="Ciudad de destino", required)
+
+    // Estado
     .mb-3
-      label.form-label Estado: 
-      select.form-select(name="status") 
-        option(value="pendiente") Pendiente 
-        option(value="en tránsito") En tránsito 
-        option(value="entregado") Entregado 
-    button.btn.btn-success.mt-2(type="submit") Guardar
-    a.btn.btn-secondary.mt-2.ms-2(href="/") Cancelar
+      label.form-label(for="status") Estado
+      select.form-select#status(name="status")
+        option(value="pendiente" selected) pendiente
+        option(value="en tránsito") en tránsito
+        option(value="entregado") entregado
+
+    // Productos
+    h5.mt-4 Productos
+    p.text-muted Ingresá la cantidad para cada producto (0 para no incluirlo).
+
+    // Campo de búsqueda
+    input.form-control.mb-3#filterInput(type="text", placeholder="🔍 Buscar producto por nombre...")
+
+    // Contenedor donde se mostrarán los productos filtrados
+    .product-list#productList
+
+    // Botones (con margen inferior para separar del footer)
+    .mt-4.mb-5.text-center
+      button.btn.btn-success(type="submit") Facturar
+      a.btn.btn-secondary.ms-2(href="/shipments") Cancelar
+
+  // Script de filtrado dinámico con lista vacía al inicio
+  script.
+    const filterInput = document.getElementById('filterInput');
+    const productList = document.getElementById('productList');
+    const products = !{JSON.stringify(products)};
+
+    function renderProducts(list) {
+      productList.innerHTML = '';
+      if (list.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'text-muted';
+        p.textContent = 'No se encontraron productos.';
+        productList.appendChild(p);
+        return;
+      }
+
+      list.forEach(prod => {
+        const div = document.createElement('div');
+        div.className = 'product-item border rounded p-3 mb-2 bg-light';
+        div.innerHTML = `
+          <label class="form-label mb-1">${prod.name} 
+            <span class="text-muted small">(stock: ${prod.stock})</span>
+          </label>
+          <input class="form-control" type="number" name="quantities[${prod._id}]" value="0" min="0">
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    filterInput.addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+      renderProducts(filtered);
+    });

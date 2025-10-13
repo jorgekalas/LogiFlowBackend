@@ -1,58 +1,64 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { Client } from "../models/client.model.js";
+import Client from "../models/client.model.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const DB_PATH = path.join(__dirname, "../../data/db.json");
-
-function readDb() {
-  if (!fs.existsSync(DB_PATH)) {
-    fs.writeFileSync(DB_PATH, JSON.stringify({ shipments: [], clients: [] }, null, 2));
+// GET /clients
+export const listClients = async (req, res, next) => {
+  try {
+    const clients = await Client.find().sort({ lastName: 1 }).lean();
+    res.render("clients/index", { clients });
+  } catch (err) {
+    next(err);
   }
-  const raw = fs.readFileSync(DB_PATH);
-  return JSON.parse(raw);
-}
+};
 
-function writeDb(data) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-}
-
-export function listClients(req, res) {
-  const db = readDb();
-  res.render("clients/index", { clients: db.clients });
-}
-
-export function showCreate(req, res) {
+// GET /clients/new
+export const showCreate = (req, res) => {
   res.render("clients/new");
-}
+};
 
-export function createClient(req, res) {
-  const db = readDb();
-  const client = new Client(req.body);
-  db.clients.push(client);
-  writeDb(db);
-  res.redirect("/clients");
-}
+// POST /clients
+export const createClient = async (req, res, next) => {
+  try {
+    const { name, lastName, dni, email, phone } = req.body;
+    const client = new Client({ name, lastName, dni, email, phone });
+    await client.save();
+    res.redirect("/clients");
+  } catch (err) {
+    next(err);
+  }
+};
 
-export function showEdit(req, res) {
-  const db = readDb();
-  const client = db.clients.find(c => c.id === req.params.id);
-  res.render("clients/edit", { client });
-}
+// GET /clients/:id/edit
+export const showEdit = async (req, res, next) => {
+  try {
+    const client = await Client.findById(req.params.id).lean();
+    if (!client) return res.status(404).send("Cliente no encontrado");
+    res.render("clients/edit", { client });
+  } catch (err) {
+    next(err);
+  }
+};
 
-export function updateClient(req, res) {
-  const db = readDb();
-  const idx = db.clients.findIndex(c => c.id === req.params.id);
-  db.clients[idx] = { ...db.clients[idx], ...req.body };
-  writeDb(db);
-  res.redirect("/clients");
-}
+// PUT /clients/:id
+export const updateClient = async (req, res, next) => {
+  try {
+    const { name, lastName, dni, email, phone } = req.body;
+    await Client.findByIdAndUpdate(
+      req.params.id,
+      { name, lastName, dni, email, phone },
+      { runValidators: true }
+    );
+    res.redirect("/clients");
+  } catch (err) {
+    next(err);
+  }
+};
 
-export function deleteClient(req, res) {
-  const db = readDb();
-  db.clients = db.clients.filter(c => c.id !== req.params.id);
-  writeDb(db);
-  res.redirect("/clients");
-}
+// DELETE /clients/:id
+export const deleteClient = async (req, res, next) => {
+  try {
+    await Client.findByIdAndDelete(req.params.id);
+    res.redirect("/clients");
+  } catch (err) {
+    next(err);
+  }
+};

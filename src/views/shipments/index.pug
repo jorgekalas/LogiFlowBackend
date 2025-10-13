@@ -1,23 +1,41 @@
-extends ../layout 
- 
-block content 
-  a.btn.btn-add.mb-3(href="/shipments/new")  Nuevo envio
-  if shipments.length 
-    table.table.table-bordered.table-striped
-      thead.table-light
-        tr 
-          th Cliente 
-          th Origen 
-          th Destino 
-          th Estado 
-          th Acciones 
+extends ../layout
+
+block content
+  h2 Lista de Envíos
+  a.btn.btn-success.mb-3(href="/shipments/new") Nuevo envío
+
+  if shipments.length
+    table.table.table-striped.table-bordered
+      thead.table-dark
+        tr
+          th #
+          th Cliente
+          th Productos
+          th Factura
+          th Origen
+          th Destino
+          th Estado
+          th Acciones
       tbody
-        each s in shipments 
-          tr 
-            td #{s.client} 
-            td #{s.origin} 
-            td #{s.destination} 
-            td 
+        each s in shipments
+          tr
+            td #{s.sequence || "-"}
+            td #{s.client ? `${s.client.name} (${s.client.email})` : "Sin cliente"}
+            td
+              if s.products && s.products.length
+                ul
+                  each p in s.products
+                    li #{p.product ? p.product.name : "Desconocido"} (x#{p.quantity})
+              else
+                | Sin productos
+            td
+              if invoiceMap.get(String(s._id))
+                | #{invoiceMap.get(String(s._id)).number}
+              else
+                | Sin factura
+            td #{s.origin}
+            td #{s.destination}
+            td
               if s.status === 'pendiente'
                 span.badge.bg-secondary #{s.status}
               else if s.status === 'en tránsito'
@@ -26,9 +44,9 @@ block content
                 span.badge.bg-success #{s.status}
               else
                 span.badge.bg-light.text-dark #{s.status}
-            td 
-              a.btn.btn-edit(href=`/shipments/${s.id}/edit`) Editar
-              form(method="post", action=`/shipments/${s.id}/delete`, style="display:inline")
-                button.btn.btn-delete(type="submit") Eliminar
-  else 
-    p.text-muted No hay envios cargados. 
+            td
+              a.btn.btn-warning.btn-sm.me-2(href=`/shipments/${s._id}/edit`) Editar
+              form(method="post", action=`/shipments/${s._id}/delete`, style="display:inline")
+                button.btn.btn-danger.btn-sm(type="submit") Eliminar
+  else
+    p.text-muted No hay envíos cargados.

@@ -1,4 +1,12 @@
 {
-  "shipments": [],
+  "shipments": [
+    {
+      "id": "1759022752557",
+      "client": "Juan",
+      "origin": "Cordoba",
+      "destination": "Buenos Aires",
+      "status": "pendiente"
+    }
+  ],
   "clients": []
 }

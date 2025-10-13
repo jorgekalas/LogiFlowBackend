@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  h2 Nueva Factura
+  form(method="POST", action="/invoices")
+    .mb-3
+      label.form-label Número
+      input.form-control(type="text", name="number", required)
+    .mb-3
+      label.form-label Fecha
+      input.form-control(type="date", name="date", required)
+    .mb-3
+      label.form-label Monto
+      input.form-control(type="number", name="amount", step="0.01", min="0", required)
+    .mb-3
+      label.form-label Asociar a Envío
+      select.form-select(name="shipment")
+        option(value="") Ninguno
+        each s in shipments
+          option(
+            value=s._id,
+            selected=(preselectedShipment && String(s._id) === String(preselectedShipment._id))
+          ) Envío #{s.sequence} - #{s.client ? s.client.name : "Sin cliente"}
+    button.btn.btn-success(type="submit") Guardar
+    a.btn.btn-secondary(href="/invoices") Cancelar

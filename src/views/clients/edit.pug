@@ -1,12 +1,28 @@
 extends ../layout
 
 block content
-  h2 Editar cliente
-  form(method="post", action=`/clients/${client.id}`)
-    label Nombre:
-    input(type="text", name="name", value=client.name, required)
-    label Email:
-    input(type="email", name="email", value=client.email, required)
-    label Teléfono:
-    input(type="text", name="phone", value=client.phone)
-    button.btn.btn-add(type="submit") Actualizar
+  h2.mb-4 Editar Cliente
+
+  form(method="post", action=`/clients/${client._id}?_method=PUT`)
+    .mb-3
+      label.form-label(for="name") Nombre
+      input.form-control#name(type="text", name="name", required, value=client.name)
+
+    .mb-3
+      label.form-label(for="lastName") Apellido
+      input.form-control#lastName(type="text", name="lastName", required, value=client.lastName)
+
+    .mb-3
+      label.form-label(for="dni") DNI
+      input.form-control#dni(type="text", name="dni", required, value=client.dni)
+
+    .mb-3
+      label.form-label(for="email") Email
+      input.form-control#email(type="email", name="email", required, value=client.email)
+
+    .mb-3
+      label.form-label(for="phone") Teléfono
+      input.form-control#phone(type="text", name="phone", value=client.phone)
+
+    button.btn.btn-success(type="submit") Guardar
+    a.btn.btn-secondary.ms-2(href="/clients") Cancelar

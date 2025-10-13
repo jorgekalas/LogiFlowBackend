@@ -1,12 +1,53 @@
 extends layout
 
 block content
-  h2 Bienvenido a LogiFlow
-  p Selecciona el modulo que quieras gestionar:
-  table
-    tr
-      td
-        a.btn.btn-add(href="/shipments") 📦  Envío
-      td(width="20")
-      td
-        a.btn.btn-add(href="/clients") 👤  Cliente
+  main.d-flex.flex-column.align-items-center.justify-content-center(style="min-height:85vh; background:#f8fafc;")
+    .container.text-center
+      h1.mb-3.text-primary Bienvenido a LogiFlow
+      p.text-muted.fs-5 Seleccioná el módulo que quieras gestionar:
+
+      // GRID 2x2 centrado
+      .d-grid.gap-4.justify-content-center.mt-5(style="grid-template-columns: repeat(2, 280px);")
+
+        // Clientes
+        a.text-decoration-none(href="/clients")
+          .card.shadow-sm.border-0(style="background:#e8f5e9; transition:all .3s;")
+            .card-body.py-4
+              i.fas.fa-users.fs-1.text-success.mb-3
+              h4.text-dark.mb-1 Clientes
+              p.text-muted.mb-0 Administrá los clientes del sistema.
+            .card-footer.bg-transparent.text-success.fw-semibold(style="border-top:none;") Ir al módulo →
+
+        // Envíos
+        a.text-decoration-none(href="/shipments")
+          .card.shadow-sm.border-0(style="background:#e3f2fd; transition:all .3s;")
+            .card-body.py-4
+              i.fas.fa-truck.fs-1.text-primary.mb-3
+              h4.text-dark.mb-1 Envíos
+              p.text-muted.mb-0 Controlá y gestioná los envíos.
+            .card-footer.bg-transparent.text-primary.fw-semibold(style="border-top:none;") Ir al módulo →
+
+        // Productos
+        a.text-decoration-none(href="/products")
+          .card.shadow-sm.border-0(style="background:#fff8e1; transition:all .3s;")
+            .card-body.py-4
+              i.fas.fa-boxes.fs-1.text-warning.mb-3
+              h4.text-dark.mb-1 Productos
+              p.text-muted.mb-0 Consultá y gestioná los productos.
+            .card-footer.bg-transparent.text-warning.fw-semibold(style="border-top:none;") Ir al módulo →
+
+        // Facturas
+        a.text-decoration-none(href="/invoices")
+          .card.shadow-sm.border-0(style="background:#ffebee; transition:all .3s;")
+            .card-body.py-4
+              i.fas.fa-file-invoice-dollar.fs-1.text-danger.mb-3
+              h4.text-dark.mb-1 Facturas
+              p.text-muted.mb-0 Administrá las facturas emitidas.
+            .card-footer.bg-transparent.text-danger.fw-semibold(style="border-top:none;") Ir al módulo →
+
+  script.
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.addEventListener('mouseover', () => card.style.transform = 'scale(1.03)');
+      card.addEventListener('mouseout', () => card.style.transform = 'scale(1)');
+    });
