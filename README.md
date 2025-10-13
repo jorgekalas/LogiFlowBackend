@@ -71,7 +71,7 @@ Instalación y Configuración
 ---------------------------
 
 1. Clonar el repositorio:
-git clone https://github.com/tuusuario/logiflow.git
+git clone https://github.com/jorgekalas/LogiFlowBackend
 cd logiflow_project
 
 2. Instalar dependencias:
