@@ -1,68 +1,186 @@
-# LogiFlow 
+LogiFlow
+=========
 
-CRUD básico de envíos con Node.js, Express, Pug y base de datos en JSON.
+Descripción General
+-------------------
+LogiFlow es una aplicación web desarrollada con Node.js, Express y MongoDB para la gestión integral de operaciones logísticas. Permite administrar clientes, productos, envíos y facturas dentro de una arquitectura MVC (Model-View-Controller) con vistas construidas en Pug y estilizadas con Bootstrap.  
 
-## Instalación
+La aplicación ofrece una interfaz moderna, fácil de usar y optimizada para visualizar, crear y editar datos relacionados con los procesos logísticos de una empresa.
 
-1. Clonar o descomprimir el proyecto.
-2. Abrir la carpeta en VS Code.
-3. Instalar dependencias:
-   ```bash
-   npm install
-   ```
+---
 
-## Ejecución
+Tecnologías Utilizadas
+----------------------
 
-```bash
+Backend:
+Node.js
+Express.js
+MongoDB con Mongoose
+Nodemon (para desarrollo)
+Method Override para soportar PUT y DELETE desde formularios
+
+Frontend:
+Pug (motor de plantillas)
+Bootstrap 5
+JavaScript vanilla para interactividad dinámica (búsqueda, filtrado, etc.)
+
+Arquitectura:
+Modelo MVC (Model, View, Controller)
+Rutas separadas para cada módulo
+Organización modular por carpetas
+
+---
+
+Estructura del Proyecto
+-----------------------
+
+logiflow_project/
+│
+├── src/
+│   ├── config/
+│   │   └── mongo.js
+│   ├── controllers/
+│   │   ├── client.controller.js
+│   │   ├── product.controller.js
+│   │   ├── shipment.controller.js
+│   │   └── invoice.controller.js
+│   ├── models/
+│   │   ├── client.model.js
+│   │   ├── product.model.js
+│   │   ├── shipment.model.js
+│   │   └── invoice.model.js
+│   ├── routes/
+│   │   ├── client.routes.js
+│   │   ├── product.routes.js
+│   │   ├── shipment.routes.js
+│   │   └── invoice.routes.js
+│   └── views/
+│       ├── layout.pug
+│       ├── home.pug
+│       ├── clients/
+│       ├── products/
+│       ├── shipments/
+│       └── invoices/
+│
+├── package.json
+└── app.js
+
+---
+
+Instalación y Configuración
+---------------------------
+
+1. Clonar el repositorio:
+git clone https://github.com/tuusuario/logiflow.git
+cd logiflow_project
+
+2. Instalar dependencias:
+npm install
+
+3. Configurar la conexión a MongoDB:
+Editar el archivo src/config/mongo.js y colocar la URI de conexión de MongoDB local o Atlas.
+
+Ejemplo:
+import mongoose from "mongoose";
+
+mongoose.connect("mongodb://127.0.0.1:27017/logiflow")
+  .then(() => console.log("Conectado a MongoDB"))
+  .catch(err => console.error("Error al conectar:", err));
+
+---
+
+Ejecución del Proyecto
+----------------------
+
+Modo normal:
 npm start
-```
 
-El servidor se abrirá en: [http://localhost:3000](http://localhost:3000)
+Modo desarrollo con reinicio automático:
+npm run dev
 
-## Funcionalidades
+El servidor se iniciará por defecto en:
+http://localhost:3000
 
-- Listar envíos
-- Crear envío
-- Editar envío
-- Eliminar envío
+---
 
-- Listar clientes
-- Crear cliente
-- Editar cliente
-- Eliminar cliente
+Funcionalidades Principales
+---------------------------
 
-## 🧪 API Endpoints
+Módulo de Clientes:
+Permite crear, editar y eliminar clientes.  
+Campos obligatorios: nombre, apellido, DNI y email.  
+Listado de clientes con opciones de edición y eliminación.
 
--> Clientes
+Módulo de Productos:
+Alta, edición y eliminación de productos.  
+Campos: nombre, descripción, stock y precio.  
+Visualización en tabla ordenada con acciones rápidas.
 
-  - GET /clients → Listar clientes
+Módulo de Envíos:
+Creación de nuevos envíos asociados a clientes.  
+Selección dinámica de productos con buscador en tiempo real.  
+Control de stock automático al registrar o editar envíos.  
+Redirección automática a facturación al confirmar un envío.
 
-  - POST /clients → Crear cliente
+Módulo de Facturación:
+Creación y gestión de facturas asociadas a envíos.  
+Preselección automática del envío recién creado.  
+Campos: número, fecha, monto y envío asociado.
 
-  - PUT /clients/:id → Actualizar cliente
+Página de Inicio:
+Interfaz moderna con diseño 2x2.  
+Tarjetas pastel para navegación rápida entre módulos.  
+Diseño centrado y responsivo.
 
-  - DELETE /clients/:id → Eliminar cliente
+---
 
-- Envíos
+Scripts Disponibles
+-------------------
 
-  - GET /shipments → Listar envíos
+"scripts": {
+  "start": "node app.js",
+  "dev": "nodemon app.js"
+}
 
-  - POST /shipments → Crear envío
+---
 
-  - PUT /shipments/:id → Actualizar envío
+Buenas Prácticas Implementadas
+------------------------------
 
-  - DELETE /shipments/:id → Eliminar envío
+Separación clara entre lógica de negocio, vistas y modelos.  
+Código legible y modular.  
+Formularios consistentes con Bootstrap 5.  
+Validaciones básicas en backend (campos requeridos).  
+Filtrado de productos en tiempo real sin recargar la página.  
+Compatibilidad con navegadores modernos.
 
-Base de datos persistida en **data/db.json** (próximamente migraremos a MongoDB)
+---
 
--> Autores
+Requisitos Previos
+------------------
 
-Hillcoat, Juan Pablo
+Node.js versión 18 o superior.  
+MongoDB instalado y en ejecución.  
+Navegador actualizado con soporte ES6.
 
-Leone, Milena Nahir
+---
 
-Rodriguez, Carlos Douglas
+Créditos
+--------
 
-Molina, Maria Julieta
+Desarrollado por:
+- Hillcoat, Juan Pablo; 
+- Leone, Milena Nadin; 
+- Rodriguez, Carlos Douglas; 
+- Molina, María Julieta; 
+- Kalas, Jorge Adrian  
+Proyecto académico de gestión logística con Node.js y MongoDB.  
+Diseño y estética basados en Bootstrap 5 y Pug.
 
-Kalas, Jorge Adrian
+---
+
+Licencia
+--------
+
+Este proyecto se distribuye bajo la licencia MIT.  
+Puedes usarlo, modificarlo y distribuirlo libremente con fines educativos o profesionales.
