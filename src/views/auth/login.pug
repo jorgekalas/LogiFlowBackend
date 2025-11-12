@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  .d-flex.justify-content-center.align-items-center(style="min-height:80vh; background:#f8fafc;")
+    .card.shadow-lg.p-4(style="width:380px; border:0; background:#ffffff;")
+      h3.text-center.mb-4.text-primary Iniciar Sesión
+      if error
+        .alert.alert-danger.text-center= error
+      form(method="post", action="/login")
+        .mb-3
+          label.form-label(for="username") Usuario
+          input.form-control#username(type="text", name="username", placeholder="Ingrese su usuario", required)
+        .mb-3
+          label.form-label(for="password") Contraseña
+          input.form-control#password(type="password", name="password", placeholder="Ingrese su contraseña", required)
+        button.btn.btn-success.w-100.mt-2(type="submit") Ingresar
+      hr
+      p.text-center.text-muted.mt-3 Acceso exclusivo para administradores
