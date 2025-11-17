@@ -1,185 +1,330 @@
-LogiFlow
-=========
+# LogiFlow - Backend
 
-Descripción General
--------------------
-LogiFlow es una aplicación web desarrollada con Node.js, Express y MongoDB para la gestión integral de operaciones logísticas. Permite administrar clientes, productos, envíos y facturas dentro de una arquitectura MVC (Model-View-Controller) con vistas construidas en Pug y estilizadas con Bootstrap.  
-
-La aplicación ofrece una interfaz moderna, fácil de usar y optimizada para visualizar, crear y editar datos relacionados con los procesos logísticos de una empresa.
+Sistema de Gestión Logística (Clientes, Productos, Envíos y Facturación)  
+Proyecto desarrollado para el 3° Parcial – IFST 29 – Backend con Node.js y Express
 
 ---
 
-Tecnologías Utilizadas
-----------------------
+## Descripción General
 
-Backend:
-Node.js
-Express.js
-MongoDB con Mongoose
-Nodemon (para desarrollo)
-Method Override para soportar PUT y DELETE desde formularios
+LogiFlow es un sistema de gestión logística completo que permite administrar:
 
-Frontend:
-Pug (motor de plantillas)
-Bootstrap 5
-JavaScript vanilla para interactividad dinámica (búsqueda, filtrado, etc.)
+- Clientes
+- Productos
+- Envíos asociando productos y descontando stock automáticamente
+- Facturación vinculada a cada envío
+- Autenticación de usuarios (Admin)
+- Listados, edición, creación y eliminación
+- Validaciones y manejo de errores amigables
+- Persistencia con MongoDB Atlas
+- Interfaz generada con Pug + Bootstrap 5
 
-Arquitectura:
-Modelo MVC (Model, View, Controller)
-Rutas separadas para cada módulo
-Organización modular por carpetas
+Es un proyecto académico desarrollado bajo arquitectura MVC, siguiendo todas las consignas del parcial y aplicando buenas prácticas de desarrollo backend.
 
 ---
 
-Estructura del Proyecto
------------------------
+## Objetivo Académico
 
-logiflow_project/
-│
-├── src/
-│   ├── config/
-│   │   └── mongo.js
-│   ├── controllers/
-│   │   ├── client.controller.js
-│   │   ├── product.controller.js
-│   │   ├── shipment.controller.js
-│   │   └── invoice.controller.js
-│   ├── models/
-│   │   ├── client.model.js
-│   │   ├── product.model.js
-│   │   ├── shipment.model.js
-│   │   └── invoice.model.js
-│   ├── routes/
-│   │   ├── client.routes.js
-│   │   ├── product.routes.js
-│   │   ├── shipment.routes.js
-│   │   └── invoice.routes.js
-│   └── views/
-│       ├── layout.pug
-│       ├── home.pug
-│       ├── clients/
-│       ├── products/
-│       ├── shipments/
-│       └── invoices/
-│
-├── package.json
-└── app.js
+El objetivo del trabajo práctico es construir un sistema backend completo, con:
+
+- CRUDs completos
+- Validaciones del lado del servidor
+- Autenticación y sesiones
+- Manejo de errores personalizado
+- Relaciones entre entidades (1:N, N:N)
+- Actualización y reversión de stock
+- Vistas dinámicas en Pug
+- Conexión a base de datos en la nube (MongoDB Atlas)
+
+Este proyecto cumple íntegramente con cada punto establecido en la consigna.
 
 ---
 
-Instalación y Configuración
----------------------------
+## Tecnologías Utilizadas
 
-1. Clonar el repositorio:
-git clone https://github.com/jorgekalas/LogiFlowBackend
-cd logiflow_project
+| Tecnología      | Uso                                     |
+| --------------- | --------------------------------------- |
+| Node.js (ESM)   | Backend del sistema                     |
+| Express.js      | Framework HTTP + rutas                  |
+| MongoDB Atlas   | Base de datos principal                 |
+| Mongoose        | ODM y validaciones                      |
+| Pug             | Sistema de plantillas                   |
+| Bootstrap 5     | Estilos                                 |
+| Express-session | Gestión de sesiones                     |
+| Method-override | Simulación de PUT/DELETE en formularios |
+| bcryptjs        | Hashing de contraseñas                  |
+| dotenv          | Gestión de variables de entorno         |
 
-2. Instalar dependencias:
+---
+
+## Estructura de Carpetas
+
+```
+src/
+ ├── config/
+ │    └── mongo.js
+ ├── controllers/
+ ├── middleware/
+ ├── models/
+ ├── routes/
+ ├── utils/
+ └── views/
+      ├── clients/
+      ├── products/
+      ├── shipments/
+      ├── invoices/
+      ├── auth/
+      ├── layout.pug
+      └── home.pug
+```
+
+---
+
+## Autenticación
+
+El sistema incluye:
+
+- Login con usuario/contraseña
+- Sesiones persistentes
+- Middleware de protección de rutas
+- Hash seguro con bcryptjs
+- Usuario inicial creado mediante script
+
+Para acceder:
+
+```
+usuario: admin
+contraseña: admin123
+```
+
+---
+
+## Modelos de Datos (Mongoose)
+
+### Cliente
+
+- name
+- lastName
+- dni
+- email
+- phone
+
+### Producto
+
+- name
+- description
+- stock
+- price
+
+### Envío
+
+- sequence (autoincremental)
+- client (ref Client)
+- origin / destination
+- status (pendiente / en tránsito / entregado)
+- products: [{ product, quantity }]
+
+### Factura
+
+- number
+- date
+- amount
+- shipment (ref Shipment)
+
+---
+
+## Validaciones del Servidor
+
+### Clientes
+
+- DNI de 7–8 dígitos
+- Email válido
+- Campos obligatorios
+- Manejo de duplicados
+
+### Productos
+
+- Stock >= 0
+- Precio >= 0
+- Name obligatorio
+
+### Envíos
+
+- Cliente obligatorio
+- Origen / destino obligatorios
+- Descuento automático de stock
+- Reversión de stock al editar
+- Control de stock insuficiente
+
+### Facturas
+
+- Fecha válida
+- Monto >= 0
+- Número obligatorio
+- Permite o no asociar envío
+
+---
+
+## Manejo de Errores
+
+Incluye:
+
+- Middleware centralizado
+- Validaciones amigables mostradas en Pug
+- Reenvío de datos cuando falla un formulario
+- Control de stock insuficiente
+- Errores de base de datos (duplicados, id inválido, validación)
+
+---
+
+## Instalación
+
+1. Clonar el repositorio
+
+```
+git clone https://github.com/tuusuario/Logiflow-Backend
+cd Logiflow-Backend
+```
+
+2. Instalar dependencias
+
+```
 npm install
+```
 
-3. Configurar la conexión a MongoDB:
-Editar el archivo src/config/mongo.js y colocar la URI de conexión de MongoDB local o Atlas.
+3. Crear archivo `.env`
 
-Ejemplo:
-import mongoose from "mongoose";
+```
+MONGODB_URI=TU_URI_DE_ATLAS
+SESSION_SECRET=logiflow-secret
+```
 
-mongoose.connect("mongodb://127.0.0.1:27017/logiflow")
-  .then(() => console.log("Conectado a MongoDB"))
-  .catch(err => console.error("Error al conectar:", err));
+4. Crear usuario admin
 
----
+```
+node createAdmin.js
+```
 
-Ejecución del Proyecto
-----------------------
+5. Iniciar servidor
 
-Modo normal:
+```
 npm start
+```
 
-Modo desarrollo con reinicio automático:
-npm run dev
+Servidor disponible en:
 
-El servidor se iniciará por defecto en:
+```
 http://localhost:3000
+```
 
 ---
 
-Funcionalidades Principales
----------------------------
+## Flujo del Sistema
 
-Módulo de Clientes:
-Permite crear, editar y eliminar clientes.  
-Campos obligatorios: nombre, apellido, DNI y email.  
-Listado de clientes con opciones de edición y eliminación.
+### 1. Crear envío
 
-Módulo de Productos:
-Alta, edición y eliminación de productos.  
-Campos: nombre, descripción, stock y precio.  
-Visualización en tabla ordenada con acciones rápidas.
+- Elegir cliente
+- Seleccionar productos
+- Indicar cantidades
+- Se descuenta stock automáticamente
+- Se redirige a creación de factura
 
-Módulo de Envíos:
-Creación de nuevos envíos asociados a clientes.  
-Selección dinámica de productos con buscador en tiempo real.  
-Control de stock automático al registrar o editar envíos.  
-Redirección automática a facturación al confirmar un envío.
+### 2. Editar envío
 
-Módulo de Facturación:
-Creación y gestión de facturas asociadas a envíos.  
-Preselección automática del envío recién creado.  
-Campos: número, fecha, monto y envío asociado.
+- Permite cambiar estado
+- Revierte stock previo
+- Aplica nuevo stock
 
-Página de Inicio:
-Interfaz moderna con diseño 2x2.  
-Tarjetas pastel para navegación rápida entre módulos.  
-Diseño centrado y responsivo.
+### 3. Facturación
+
+- Asociar o no a envío
+- Registrar monto, fecha y número
 
 ---
 
-Scripts Disponibles
--------------------
+## API REST (Opcional para Postman)
 
-"scripts": {
-  "start": "node app.js",
-  "dev": "nodemon app.js"
-}
+### GET
 
----
+- /clients
+- /products
+- /shipments
+- /invoices
 
-Buenas Prácticas Implementadas
-------------------------------
+### POST
 
-Separación clara entre lógica de negocio, vistas y modelos.  
-Código legible y modular.  
-Formularios consistentes con Bootstrap 5.  
-Validaciones básicas en backend (campos requeridos).  
-Filtrado de productos en tiempo real sin recargar la página.  
-Compatibilidad con navegadores modernos.
+- /clients
+- /products
+- /shipments
+- /invoices
 
----
+### PUT
 
-Requisitos Previos
-------------------
+- /clients/:id
+- /products/:id
+- /shipments/:id
+- /invoices/:id
 
-Node.js versión 18 o superior.  
-MongoDB instalado y en ejecución.  
-Navegador actualizado con soporte ES6.
+### DELETE
 
----
-
-Créditos
---------
-
-Desarrollado por:
-- Hillcoat, Juan Pablo; 
-- Leone, Milena Nadin; 
-- Rodriguez, Carlos Douglas; 
-- Molina, María Julieta; 
-- Kalas, Jorge Adrian  
-
+- /clients/:id
+- /products/:id
+- /shipments/:id
+- /invoices/:id
 
 ---
 
-Licencia
---------
+## Capturas de Pantalla
 
-Este proyecto se distribuye bajo la licencia MIT.  
-Puedes usarlo, modificarlo y distribuirlo libremente con fines educativos o profesionales.
+### Pantalla de Login
+![Login](./screenshots/login.png)
+
+### Dashboard Principal
+![Home](./screenshots/home.png)
+
+### Gestión de Clientes
+![Clientes](./screenshots/clients_list.png)
+
+### Alta de Producto
+![Productos](./screenshots/product_new.png)
+
+### Creación de Envío
+![Nuevo Envío](./screenshots/shipment_new.png)
+
+### Edición de Envío
+![Editar Envío](./screenshots/shipment_edit.png)
+
+### Facturación
+![Facturas](./screenshots/invoice_list.png)
+
+
+---
+## Integrantes del equipo
+
+- Hillcoat, Juan Pablo;
+- Leone, Milena Nadin;
+- Rodriguez, Carlos Douglas;
+- Molina, María Julieta;
+- Kalas, Jorge Adrian
+
+---
+
+## Estado del Proyecto
+
+El proyecto está completo, funcional y cumple los siguientes requisitos:
+
+- CRUDs
+- Validaciones
+- Manejo de errores
+- Sesiones y login
+- Stock dinámico
+- Facturación
+- MVC
+- Pug
+- MongoDB Atlas
+
+---
+
+## Licencia
+
+Proyecto académico — libre para revisión y mejora.
