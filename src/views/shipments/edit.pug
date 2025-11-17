@@ -3,23 +3,40 @@ extends ../layout
 block content
   h2.mb-4 Editar Envío
 
+  if error
+    .alert.alert-danger.text-center #{error}
+
   form(method="post", action=`/shipments/${shipment._id}?_method=PUT`)
+    
     // Cliente
     .mb-3
       label.form-label(for="client") Cliente
       select.form-select#client(name="client" required)
         each c in clients
-          option(value=c._id selected=(String(c._id)===String(shipment.client)))= c.name + " (" + c.email + ")"
+          option(
+            value=c._id
+            selected=(String(c._id) === String(shipment.client))
+          ) #{c.name} (#{c.email})
 
     // Origen
     .mb-3
       label.form-label(for="origin") Origen
-      input.form-control#origin(type="text" name="origin" required value=shipment.origin)
+      input.form-control#origin(
+        type="text"
+        name="origin"
+        required
+        value=shipment.origin
+      )
 
     // Destino
     .mb-3
       label.form-label(for="destination") Destino
-      input.form-control#destination(type="text" name="destination" required value=shipment.destination)
+      input.form-control#destination(
+        type="text"
+        name="destination"
+        required
+        value=shipment.destination
+      )
 
     // Estado
     .mb-3
@@ -32,15 +49,24 @@ block content
     // Productos
     h5.mt-4 Productos
     p.text-muted Actualizá las cantidades (0 para quitarlo).
+
     - const qMap = new Map((shipment.products||[]).map(it => [String(it.product?._id), it.quantity]));
+
     each p in products
       - const current = qMap.get(String(p._id)) || 0;
+
       .row.mb-2
         .col-md-6
-          label.form-label(for=`q-${p._id}`)= p.name
-          small.text-muted.ms-2 (stock actual: #{p.stock})
+          label.form-label(for=`q-${p._id}`)= `${p.name} `
+            small.text-muted(ms-2) (stock actual: #{p.stock})
         .col-md-3
-          input.form-control(type="number", id=`q-${p._id}`, name=`quantities[${p._id}]`, min="0", value=current)
+          input.form-control(
+            type="number",
+            id=`q-${p._id}`,
+            name=`quantities[${p._id}]`,
+            min="0",
+            value=current
+          )
 
     button.btn.btn-success(type="submit") Guardar
     a.btn.btn-secondary.ms-2(href="/shipments") Cancelar

@@ -1,25 +1,51 @@
 extends ../layout
 
 block content
-  h2 Nueva Factura
-  form(method="POST", action="/invoices")
+  h2.mb-4 Nueva Factura
+
+  if error
+    .alert.alert-danger.text-center #{error}
+
+  form(method="post", action="/invoices")
+
     .mb-3
-      label.form-label Número
-      input.form-control(type="text", name="number", required)
+      label.form-label(for="number") Número
+      input.form-control(
+        type="text"
+        name="number"
+        required
+        value=(formData && formData.number) || ""
+      )
+
     .mb-3
-      label.form-label Fecha
-      input.form-control(type="date", name="date", required)
+      label.form-label(for="date") Fecha
+      input.form-control(
+        type="date"
+        name="date"
+        required
+        value=(formData && formData.date) || ""
+      )
+
     .mb-3
-      label.form-label Monto
-      input.form-control(type="number", name="amount", step="0.01", min="0", required)
+      label.form-label(for="amount") Monto
+      input.form-control(
+        type="number"
+        step="0.01"
+        min="0"
+        name="amount"
+        required
+        value=(formData && formData.amount) || ""
+      )
+
     .mb-3
       label.form-label Asociar a Envío
       select.form-select(name="shipment")
         option(value="") Ninguno
         each s in shipments
           option(
-            value=s._id,
-            selected=(preselectedShipment && String(s._id) === String(preselectedShipment._id))
+            value=s._id
+            selected=(formData && formData.shipment && String(formData.shipment) === String(s._id))
           ) Envío #{s.sequence} - #{s.client ? s.client.name : "Sin cliente"}
+
     button.btn.btn-success(type="submit") Guardar
-    a.btn.btn-secondary(href="/invoices") Cancelar
+    a.btn.btn-secondary.ms-2(href="/invoices") Cancelar

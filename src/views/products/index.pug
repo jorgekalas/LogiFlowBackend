@@ -1,11 +1,13 @@
 extends ../layout
 
 block content
-  h2 Lista de Productos
+  h2.mb-4 Lista de Productos
+
   a.btn.btn-success.mb-3(href="/products/new") Nuevo producto
+
   if products.length
-    table.table
-      thead
+    table.table.table-striped.table-bordered
+      thead.table-dark
         tr
           th Nombre
           th Descripción

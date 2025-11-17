@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  h2 Lista de Envíos
+  h2.mb-4 Lista de Envíos
   a.btn.btn-success.mb-3(href="/shipments/new") Nuevo envío
 
   if shipments.length
@@ -21,6 +21,7 @@ block content
           tr
             td #{s.sequence || "-"}
             td #{s.client ? `${s.client.name} (${s.client.email})` : "Sin cliente"}
+
             td
               if s.products && s.products.length
                 ul
@@ -28,13 +29,16 @@ block content
                     li #{p.product ? p.product.name : "Desconocido"} (x#{p.quantity})
               else
                 | Sin productos
+
             td
               if invoiceMap.get(String(s._id))
                 | #{invoiceMap.get(String(s._id)).number}
               else
                 | Sin factura
+
             td #{s.origin}
             td #{s.destination}
+
             td
               if s.status === 'pendiente'
                 span.badge.bg-secondary #{s.status}
@@ -44,6 +48,7 @@ block content
                 span.badge.bg-success #{s.status}
               else
                 span.badge.bg-light.text-dark #{s.status}
+
             td
               a.btn.btn-warning.btn-sm.me-2(href=`/shipments/${s._id}/edit`) Editar
               form(method="post", action=`/shipments/${s._id}/delete`, style="display:inline")

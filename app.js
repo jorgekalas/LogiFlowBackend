@@ -12,6 +12,7 @@ import productRoutes from "./src/routes/product.routes.js";
 import invoiceRoutes from "./src/routes/invoice.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import { isAuthenticated } from "./src/middleware/auth.js";
+import { notFoundHandler, errorHandler } from "./src/middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -23,16 +24,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 
-// sessions
+// sesiones
 app.use(
   session({
-    secret: "logiflow-secret",
+    secret: process.env.SESSION_SECRET || "dev-logiflow-secret",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      // secure: true, // habilitar si usás HTTPS
+      maxAge: 1000 * 60 * 60 // 1 hora
+    }
   })
 );
 
-// session disponible en todas las vistas Pug
+// sesión disponible en todas las vistas Pug
 app.use((req, res, next) => {
   res.locals.session = req.session;
   next();
@@ -44,31 +50,36 @@ const __dirname = path.dirname(__filename);
 app.set("views", path.join(process.cwd(), "src/views"));
 app.set("view engine", "pug");
 
-// rutas públicas
+// servir archivos estáticos (por si luego agregamos CSS propio)
+app.use(express.static(path.join(process.cwd(), "public")));
+
+// rutas públicas (login / logout)
 app.use(authRoutes);
 
-// rutas protegidas
+// todas las rutas siguientes requieren autenticación
 app.use(isAuthenticated);
+
+// home
+app.get("/", (req, res) => res.render("home"));
+
+// rutas protegidas
 app.use("/clients", clientRoutes);
 app.use("/products", productRoutes);
 app.use("/shipments", shipmentRoutes);
 app.use("/invoices", invoiceRoutes);
 
-// home
-app.get("/", (req, res) => res.render("home"));
+// 404
+app.use(notFoundHandler);
 
-// errores
-app.use((err, req, res, next) => {
-  console.error("🔥 Unhandled error:", err);
-  res.status(500).send("Ocurrió un error inesperado. Reintentá más tarde.");
-});
+// errores generales
+app.use(errorHandler);
 
 // boot
 connectMongo(process.env.MONGODB_URI)
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(`✅ Servidor corriendo en http://localhost:${PORT}`)
-    );
+    app.listen(PORT, () => {
+      console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+    });
   })
   .catch((err) => {
     console.error("❌ No se pudo conectar a Mongo:", err);

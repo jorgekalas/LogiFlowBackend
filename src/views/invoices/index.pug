@@ -1,7 +1,8 @@
 extends ../layout
 
 block content
-  h2 Lista de Facturas
+  h2.mb-4 Lista de Facturas
+
   a.btn.btn-success.mb-3(href="/invoices/new") Nueva factura
 
   if invoices.length
@@ -19,7 +20,7 @@ block content
             td #{f.number}
             td #{f.date.toISOString().substring(0,10)}
             td $#{f.amount}
-            td
+            td 
               if f.shipment
                 | Envío #{f.shipment.sequence} - #{f.shipment.client ? f.shipment.client.name : "Sin cliente"}
               else

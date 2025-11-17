@@ -1,4 +1,5 @@
 import Client from "../models/client.model.js";
+import { parseValidationError, parseDuplicateKeyError } from "../utils/parseValidationError.js";
 
 // GET /clients
 export const listClients = async (req, res, next) => {
@@ -12,7 +13,7 @@ export const listClients = async (req, res, next) => {
 
 // GET /clients/new
 export const showCreate = (req, res) => {
-  res.render("clients/new");
+  res.render("clients/new", { formData: {} });
 };
 
 // POST /clients
@@ -23,6 +24,13 @@ export const createClient = async (req, res, next) => {
     await client.save();
     res.redirect("/clients");
   } catch (err) {
+    const validationMsg = parseValidationError(err) || parseDuplicateKeyError(err);
+    if (validationMsg) {
+      return res.status(400).render("clients/new", {
+        error: validationMsg,
+        formData: req.body
+      });
+    }
     next(err);
   }
 };
@@ -42,13 +50,23 @@ export const showEdit = async (req, res, next) => {
 export const updateClient = async (req, res, next) => {
   try {
     const { name, lastName, dni, email, phone } = req.body;
+
     await Client.findByIdAndUpdate(
       req.params.id,
       { name, lastName, dni, email, phone },
       { runValidators: true }
     );
+
     res.redirect("/clients");
   } catch (err) {
+    const validationMsg = parseValidationError(err) || parseDuplicateKeyError(err);
+    if (validationMsg) {
+      const client = { _id: req.params.id, ...req.body };
+      return res.status(400).render("clients/edit", {
+        error: validationMsg,
+        client
+      });
+    }
     next(err);
   }
 };

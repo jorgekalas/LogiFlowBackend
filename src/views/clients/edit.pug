@@ -3,6 +3,9 @@ extends ../layout
 block content
   h2.mb-4 Editar Cliente
 
+  if error
+    .alert.alert-danger.text-center #{error}
+
   form(method="post", action=`/clients/${client._id}?_method=PUT`)
     .mb-3
       label.form-label(for="name") Nombre

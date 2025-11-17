@@ -1,19 +1,46 @@
 extends ../layout
 
 block content
-  h2 Nuevo Producto
+  h2.mb-4 Nuevo Producto
+
+  if error
+    .alert.alert-danger.text-center #{error}
+
   form(method="post", action="/products")
+
     .mb-3
-      label.form-label Nombre
-      input.form-control(type="text", name="name", required)
+      label.form-label(for="name") Nombre
+      input.form-control(
+        type="text"
+        name="name"
+        required
+        value=(formData && formData.name) || ""
+      )
+
     .mb-3
-      label.form-label Descripción
-      textarea.form-control(name="description")
+      label.form-label(for="description") Descripción
+      textarea.form-control(name="description") #{(formData && formData.description) || ""}
+
     .mb-3
-      label.form-label Stock
-      input.form-control(type="number", name="stock", min="0", required)
+      label.form-label(for="stock") Stock
+      input.form-control(
+        type="number"
+        name="stock"
+        min="0"
+        required
+        value=(formData && formData.stock) || 0
+      )
+
     .mb-3
-      label.form-label Precio
-      input.form-control(type="number", name="price", step="0.01", min="0", required)
+      label.form-label(for="price") Precio
+      input.form-control(
+        type="number"
+        name="price"
+        step="0.01"
+        min="0"
+        required
+        value=(formData && formData.price) || 0
+      )
+
     button.btn.btn-success(type="submit") Guardar
     a.btn.btn-secondary.ms-2(href="/products") Cancelar
