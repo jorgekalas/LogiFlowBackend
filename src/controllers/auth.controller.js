@@ -9,7 +9,7 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Validación básica
+    // Validación básica del controlador
     if (!username || !password) {
       return res.status(400).render("auth/login", {
         error: "Ingresá usuario y contraseña"
@@ -46,4 +46,5 @@ export const logout = (req, res) => {
     res.redirect("/login");
   });
 };
-  
+
+
