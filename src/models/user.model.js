@@ -20,7 +20,7 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Método opcional 
+// Método opcional.
 userSchema.methods.comparePassword = function (plainPassword) {
   return bcrypt.compare(plainPassword, this.password);
 };
